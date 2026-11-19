@@ -1,0 +1,76 @@
+.workspaces {
+  padding-block: 64px 96px;
+
+  @media (max-width: 768px) {
+    padding-block: 40px 64px;
+  }
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  &__title {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  &__lede {
+    margin-top: 8px;
+    color: var(--muted);
+  }
+
+  &__count {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  &__list {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}
+
+.workspace-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--accent);
+  }
+
+  &__name {
+    font-size: 17px;
+  }
+
+  &__meta {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  &__badge {
+    padding: 4px 10px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+}
