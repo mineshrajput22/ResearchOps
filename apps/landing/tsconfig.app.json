@@ -9,11 +9,6 @@
     "skipLibCheck": true,
     "strict": true,
 
-    /* Paths */
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
