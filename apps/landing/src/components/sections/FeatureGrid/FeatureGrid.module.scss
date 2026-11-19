@@ -1,0 +1,53 @@
+@use 'abstracts' as *;
+
+.section {
+  padding-block: var(--space-16) var(--space-24);
+
+  @include until($bp-md) {
+    padding-block: var(--space-12) var(--space-16);
+  }
+}
+
+.heading {
+  margin-bottom: var(--space-8);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+
+  @include until($bp-md) {
+    margin-bottom: var(--space-6);
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  @include surface;
+  @include focus-ring;
+
+  padding: var(--space-6);
+  box-shadow: var(--shadow-card);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+
+  &:hover {
+    border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+    transform: translateY(-2px);
+  }
+}
+
+.cardTitle {
+  margin-bottom: var(--space-2);
+  font-size: 17px;
+}
+
+.cardBody {
+  color: var(--color-text-muted);
+  font-size: 15px;
+}
