@@ -54,6 +54,28 @@
   background: #fff;
 }
 
+.catalog-card[data-selected='true'] {
+  border-color: #203a30;
+  box-shadow: inset 0 0 0 1px #203a30;
+}
+
+.catalog-card button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.catalog-card button:focus-visible {
+  outline: 2px solid #203a30;
+  outline-offset: 4px;
+}
+
 .pokemon-id {
   color: #556358;
   font-size: 0.875rem;
@@ -63,6 +85,12 @@
 .catalog-card h3 {
   margin: 0.6rem 0 0.75rem;
   font-size: 1.125rem;
+}
+
+.type-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
 }
 
 .type {
@@ -108,6 +136,12 @@
   display: grid;
   grid-template-columns: 1fr auto;
   gap: 0.3rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.stats-empty {
+  margin: 1.5rem 0 0;
+  color: #c7decd;
   font-size: 0.875rem;
 }
 
