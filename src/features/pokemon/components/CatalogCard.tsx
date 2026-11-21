@@ -1,15 +1,15 @@
 import type { PokemonCatalogItem } from '../types';
-import { TypeBadge } from './TypeBadge';
 
 type CatalogCardProps = {
 	pokemon: PokemonCatalogItem;
+	selected: boolean;
 	onSelected: () => void;
 };
 
-export function CatalogCard({ pokemon, onSelected }: CatalogCardProps) {
+export function CatalogCard({ pokemon, selected, onSelected }: CatalogCardProps) {
 	return (
-		<li className='catalog-card'>
-			<button onClick={onSelected}>
+		<li className='catalog-card' data-selected={selected}>
+			<button type='button' aria-pressed={selected} onClick={onSelected}>
 				<h3>{pokemon.name}</h3>
 			</button>
 		</li>
