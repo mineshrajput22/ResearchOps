@@ -47,6 +47,14 @@
   gap: 0.75rem;
 }
 
+.catalog-empty {
+  margin: 0;
+  padding: 1.25rem;
+  border: 1px dashed #dce0d6;
+  border-radius: 0.875rem;
+  color: #556358;
+}
+
 .catalog-card {
   padding: 1.25rem;
   border: 1px solid #dce0d6;

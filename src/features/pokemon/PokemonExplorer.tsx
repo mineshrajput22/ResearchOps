@@ -28,20 +28,26 @@ export function PokemonExplorer() {
 					<h2 id='catalog-title' className='catalog-title'>
 						Catalog
 					</h2>
-					<ul className='catalog-grid'>
-						{catalog.data.results.map((pokemon) => (
-							<CatalogCard
-								key={pokemon.url}
-								pokemon={pokemon}
-								selected={activeName === pokemon.name}
-								onSelected={() => setSelectedName(pokemon.name)}
-							/>
-						))}
-					</ul>
+					{catalog.data.results.length === 0 ? (
+						<p className='catalog-empty' role='status'>
+							No Pokémon are available in the catalog.
+						</p>
+					) : (
+						<ul className='catalog-grid'>
+							{catalog.data.results.map((pokemon) => (
+								<CatalogCard
+									key={pokemon.url}
+									pokemon={pokemon}
+									selected={activeName === pokemon.name}
+									onSelected={() => setSelectedName(pokemon.name)}
+								/>
+							))}
+						</ul>
+					)}
 				</section>
 				<StatsPanel
 					pokemon={details.data}
-					isPending={details.isPending}
+					isPending={Boolean(activeName) && details.isPending}
 					isError={details.isError}
 				/>
 			</div>
