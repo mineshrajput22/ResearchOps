@@ -5,15 +5,30 @@ type StatsPanelProps = {
 	pokemon?: PokemonStats;
 	isPending: boolean;
 	isError: boolean;
+	onRetry: () => void;
 };
 
-export function StatsPanel({ pokemon, isPending, isError }: StatsPanelProps) {
+export function StatsPanel({
+	pokemon,
+	isPending,
+	isError,
+	onRetry,
+}: StatsPanelProps) {
 	return (
 		<aside className='stats-panel' aria-label='Base stats'>
 			<p className='section-label'>Base stats</p>
 			{isPending ? <p className='stats-empty'>Loading stats…</p> : null}
 			{isError ? (
-				<p className='stats-empty'>Could not load stats for this Pokémon.</p>
+				<div className='section-error' role='alert'>
+					<p>
+						{pokemon
+							? 'Could not refresh these stats.'
+							: 'Could not load stats for this Pokémon.'}
+					</p>
+					<button type='button' className='retry-button' onClick={onRetry}>
+						Retry
+					</button>
+				</div>
 			) : null}
 			{pokemon ? (
 				<>
