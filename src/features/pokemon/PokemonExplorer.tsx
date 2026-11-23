@@ -1,45 +1,26 @@
-import { useState } from 'react';
 import { CatalogCard } from './components/CatalogCard';
 import { StatsPanel } from './components/StatsPanel';
 import './pokemon-explorer.css';
+import {
+	CATALOG_PAGE_SIZE,
+	useExplorerLocation,
+} from './hooks/useExplorerLocation';
 import { useAllPokemons } from './hooks/useGetAllPokemons';
 import { usePokemonDetails } from './hooks/useGetPokemonDetails';
 
 export function PokemonExplorer() {
-	const [selectedName, setSelectedName] = useState<string>();
-
-	const catalog = useAllPokemons();
+	const { page, selectedName, setPage, setSelectedName } =
+		useExplorerLocation();
+	const catalog = useAllPokemons(
+		CATALOG_PAGE_SIZE,
+		(page - 1) * CATALOG_PAGE_SIZE,
+	);
 	const activeName = selectedName ?? catalog.data?.results[0]?.name;
 	const details = usePokemonDetails(activeName);
-
-	if (catalog.isPending) return <p>Loading catalog…</p>;
-
-	if (catalog.isError && !catalog.data) {
-		return (
-			<main className='dashboard'>
-				<header className='page-heading'>
-					<h1>Pokémon Stats Explorer</h1>
-					<p>Browse the catalog and inspect base stats fetched from PokéAPI.</p>
-				</header>
-				<section className='section-error' role='alert'>
-					<p>
-						We couldn&apos;t load the Pokémon catalog. Please check your
-						connection and try again.
-					</p>
-					<button
-						type='button'
-						className='retry-button'
-						onClick={() => catalog.refetch()}
-						disabled={catalog.isFetching}
-					>
-						Retry
-					</button>
-				</section>
-			</main>
-		);
-	}
-
 	const catalogResults = catalog.data?.results ?? [];
+	const canGoPrevious =
+		!catalog.isPlaceholderData && Boolean(catalog.data?.previous);
+	const canGoNext = !catalog.isPlaceholderData && Boolean(catalog.data?.next);
 
 	return (
 		<main className='dashboard'>
@@ -53,24 +34,31 @@ export function PokemonExplorer() {
 					<h2 id='catalog-title' className='catalog-title'>
 						Catalog
 					</h2>
-					{catalog.isError ? (
+					{catalog.isError ?
 						<div className='section-error' role='alert'>
-							<p>Could not refresh the catalog. Showing the last loaded results.</p>
+							<p>
+								{catalog.data ?
+									'Could not refresh the catalog. Showing the last loaded results.'
+								:	`Could not load catalog page ${page}. Please try again.`}
+							</p>
 							<button
 								type='button'
 								className='retry-button'
 								onClick={() => catalog.refetch()}
-								disabled={catalog.isFetching}
-							>
+								disabled={catalog.isFetching}>
 								Retry
 							</button>
 						</div>
-					) : null}
-					{catalogResults.length === 0 ? (
+					:	null}
+					{catalog.isPending ?
 						<p className='catalog-empty' role='status'>
-							No Pokémon are available in the catalog.
+							Loading catalog…
 						</p>
-					) : (
+					: catalog.data && catalogResults.length === 0 ?
+						<p className='catalog-empty' role='status'>
+							No Pokémon are available on this page.
+						</p>
+					: catalogResults.length > 0 ?
 						<ul className='catalog-grid'>
 							{catalogResults.map((pokemon) => (
 								<CatalogCard
@@ -81,7 +69,28 @@ export function PokemonExplorer() {
 								/>
 							))}
 						</ul>
-					)}
+					:	null}
+					<nav className='catalog-pagination' aria-label='Catalog pages'>
+						<button
+							type='button'
+							className='retry-button'
+							disabled={!canGoPrevious}
+							onClick={() => setPage(page - 1)}>
+							Previous
+						</button>
+						<span role='status'>
+							{catalog.isPlaceholderData ?
+								`Loading page ${page}…`
+							:	`Page ${page}`}
+						</span>
+						<button
+							type='button'
+							className='retry-button'
+							disabled={!canGoNext}
+							onClick={() => setPage(page + 1)}>
+							Next
+						</button>
+					</nav>
 				</section>
 				<StatsPanel
 					pokemon={details.data}

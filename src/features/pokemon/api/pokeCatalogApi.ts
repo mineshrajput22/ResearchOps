@@ -5,8 +5,15 @@ import type {
 	PokemonStats,
 } from '../types';
 
-export const fetchCatalog = async () => {
-	const response = await axiosInstance.get<PokemonListResponse>('pokemon');
+export const fetchCatalog = async (
+	limit: number,
+	offset: number,
+	signal: AbortSignal,
+) => {
+	const response = await axiosInstance.get<PokemonListResponse>('pokemon', {
+		params: { limit, offset },
+		signal,
+	});
 	return response.data;
 };
 
@@ -25,9 +32,11 @@ const capitalize = (value: string) =>
 /** Fetches one Pokémon and shapes the response for the stats panel. */
 export const fetchPokemonDetails = async (
 	name: string,
+	signal: AbortSignal,
 ): Promise<PokemonStats> => {
 	const response = await axiosInstance.get<PokemonDetailResponse>(
-		`pokemon/${name}`,
+		`pokemon/${encodeURIComponent(name)}`,
+		{ signal },
 	);
 	const { name: displayName, types, stats } = response.data;
 
