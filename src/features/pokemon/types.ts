@@ -5,6 +5,7 @@ export interface PokemonStat {
 
 export interface PokemonStats {
 	name: string;
+	speciesName: string;
 	types: string[];
 	stats: PokemonStat[];
 }
@@ -31,6 +32,12 @@ interface NamedApiResource {
 export interface PokemonDetailResponse {
 	id: number;
 	name: string;
+	species: NamedApiResource;
 	types: Array<{ slot: number; type: NamedApiResource }>;
 	stats: Array<{ base_stat: number; effort: number; stat: NamedApiResource }>;
+}
+
+export interface EvolutionStage {
+	speciesName: string;
+	children: EvolutionStage[];
 }

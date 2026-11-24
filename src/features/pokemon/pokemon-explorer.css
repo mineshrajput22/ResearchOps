@@ -227,6 +227,56 @@
   accent-color: #a8d3a3;
 }
 
+.pokemon-panels {
+  display: grid;
+  gap: 1rem;
+}
+
+.evolution-panel {
+  padding: 1.25rem 1.5rem;
+  border: 1px solid #dce0d6;
+  border-radius: 0.875rem;
+  background: #fff;
+}
+
+.evolution-panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.125rem;
+}
+
+.evolution-panel > p {
+  margin: 0.75rem 0 0;
+  color: #556358;
+  font-size: 0.875rem;
+}
+
+.evolution-tree,
+.evolution-tree ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evolution-tree ul {
+  margin-left: 0.75rem;
+  padding-left: 0.75rem;
+  border-left: 1px solid #dce0d6;
+}
+
+.evolution-stage {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.375rem;
+  text-transform: capitalize;
+  overflow-wrap: anywhere;
+}
+
+.evolution-stage[aria-current='true'] {
+  background: #203a30;
+  color: #f4f7ed;
+  font-weight: 600;
+}
+
 @media (max-width: 44rem) {
   .dashboard-layout {
     grid-template-columns: 1fr;

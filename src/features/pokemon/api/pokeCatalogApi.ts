@@ -38,10 +38,11 @@ export const fetchPokemonDetails = async (
 		`pokemon/${encodeURIComponent(name)}`,
 		{ signal },
 	);
-	const { name: displayName, types, stats } = response.data;
+	const { name: displayName, species, types, stats } = response.data;
 
 	return {
 		name: capitalize(displayName),
+		speciesName: species.name,
 		types: types.map(({ type }) => capitalize(type.name)),
 		stats: stats.map(({ base_stat, stat }) => ({
 			label: STAT_LABELS[stat.name] ?? capitalize(stat.name.replace('-', ' ')),

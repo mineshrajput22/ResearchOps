@@ -1,4 +1,5 @@
 import { CatalogCard } from './components/CatalogCard';
+import { EvolutionPanel } from './components/EvolutionPanel';
 import { StatsPanel } from './components/StatsPanel';
 import './pokemon-explorer.css';
 import {
@@ -17,6 +18,7 @@ export function PokemonExplorer() {
 	);
 	const activeName = selectedName ?? catalog.data?.results[0]?.name;
 	const details = usePokemonDetails(activeName);
+	const isLoadingDetails = Boolean(activeName) && details.isPending;
 	const catalogResults = catalog.data?.results ?? [];
 	const canGoPrevious =
 		!catalog.isPlaceholderData && Boolean(catalog.data?.previous);
@@ -92,12 +94,18 @@ export function PokemonExplorer() {
 						</button>
 					</nav>
 				</section>
-				<StatsPanel
-					pokemon={details.data}
-					isPending={Boolean(activeName) && details.isPending}
-					isError={details.isError}
-					onRetry={() => details.refetch()}
-				/>
+				<div className='pokemon-panels'>
+					<StatsPanel
+						pokemon={details.data}
+						isPending={isLoadingDetails}
+						isError={details.isError}
+						onRetry={() => details.refetch()}
+					/>
+					<EvolutionPanel
+						speciesName={details.data?.speciesName}
+						isWaitingForDetails={isLoadingDetails || catalog.isPending}
+					/>
+				</div>
 			</div>
 		</main>
 	);
