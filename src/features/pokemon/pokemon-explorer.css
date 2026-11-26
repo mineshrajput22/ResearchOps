@@ -34,6 +34,41 @@
   font-size: 1.375rem;
 }
 
+.catalog-search {
+  display: grid;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.catalog-search label {
+  font-weight: 600;
+}
+
+.catalog-search-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.catalog-search input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid #849489;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+}
+
+.catalog-search input:focus-visible {
+  outline: 2px solid #203a30;
+  outline-offset: 2px;
+}
+
+.catalog-search .retry-button {
+  margin-top: 0;
+}
+
 .catalog-grid,
 .stats-list {
   margin: 0;
@@ -134,7 +169,7 @@
   box-shadow: inset 0 0 0 1px #203a30;
 }
 
-.catalog-card button {
+.catalog-card-select {
   display: block;
   width: 100%;
   padding: 0;
@@ -146,7 +181,7 @@
   cursor: pointer;
 }
 
-.catalog-card button:focus-visible {
+.catalog-card-select:focus-visible {
   outline: 2px solid #203a30;
   outline-offset: 4px;
 }
@@ -160,6 +195,57 @@
 .catalog-card h3 {
   margin: 0.6rem 0 0.75rem;
   font-size: 1.125rem;
+}
+
+.compare-toggle {
+  margin-top: 0;
+}
+
+.compare-toggle[aria-pressed='true'] {
+  background: #203a30;
+  color: #f4f7ed;
+}
+
+.compare-toggle[aria-pressed='true']:hover {
+  background: #2a4a3d;
+}
+
+.comparison-panel {
+  margin-bottom: 1.75rem;
+}
+
+.comparison-panel .catalog-title {
+  margin-bottom: 0.5rem;
+}
+
+.comparison-status {
+  margin: 0;
+  color: #556358;
+}
+
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.comparison-column-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.comparison-column-header h3 {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.comparison-column-header .retry-button {
+  margin-top: 0;
 }
 
 .type-list {

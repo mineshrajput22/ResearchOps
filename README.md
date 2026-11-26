@@ -11,6 +11,32 @@ pnpm.cmd run dev
 
 Vite prints the local address in your terminal. Use `pnpm.cmd run lint` to check the code and `pnpm.cmd run build` to type-check and build. Run `pnpm.cmd run preview` after a build to preview the production output.
 
+## Using the explorer
+
+- Browse 24 Pokémon at a time. The catalog page and selected Pokémon are shareable through the `page` and `pokemon` URL parameters.
+- Search by a full or partial name, such as `chu`, or an exact PokéAPI ID, such as `25` or `#25`. Clearing the search restores the catalog page.
+- Select any catalog or search result to see its types, base stats, and evolution chain. Use **Compare** to add up to three Pokémon. Comparison selections stay in place as you browse and search, and reset on reload.
+
+## PokéAPI endpoints
+
+All requests use `GET` with the base URL `https://pokeapi.co/api/v2/`. The shared Axios client uses a 10-second timeout.
+
+| Feature | Endpoint | Data used |
+| --- | --- | --- |
+| Catalog | `/pokemon/?limit=24&offset={offset}` | Uses `results[].name` and `results[].url` for cards and `next` and `previous` for pagination. The offset is `(page - 1) * 24`. |
+| Search | `/pokemon/?limit=1000&offset={offset}` | Loads a name and resource URL index on the first nonempty search. Fetches additional batches while `next` is present. Filters names locally and matches IDs against the final segment of each resource URL. |
+| Stats and comparison | `/pokemon/{name}/` | Uses `name`, `types`, `stats`, and `species.name`. The API accepts a name or ID. Search results always use the canonical name for detail requests so they share the same cache entry as catalog selections. |
+| Evolution lookup | `/pokemon-species/{name}/` | Reads `evolution_chain.url` and extracts its chain ID. |
+| Evolution tree | `/evolution-chain/{id}/` | Maps `chain.species.name` and the nested `evolves_to` arrays into a tree. |
+
+The hosted REST API exposes `limit` and `offset` for lists. Its `q` filter is only available in local PokéAPI deployments. [Pokémon list documentation](https://pokeapi.co/v2/openapi/operations/pokemon_list) · [Pokémon detail documentation](https://pokeapi.co/v2/openapi/operations/pokemon_retrieve) · [PokéAPI v2 reference](https://pokeapi.co/v2)
+
+## Caching and recovery
+
+- Search uses the `['pokemon', 'search-index']` query key. Changing the search text filters the cached index without sending a request for each keystroke.
+- Stats and comparison use `['pokemon', 'details', name]`. Comparison fetches missing details in parallel and gives each column its own loading, error, and retry controls.
+- React Query keeps data fresh for five minutes by default and retains unused entries for up to 30 minutes. Catalog pages use a one-minute freshness window. Catalog and search failures offer a **Retry** action.
+
 ## Source structure
 
 ```text
@@ -18,18 +44,9 @@ src/
   main.tsx                     Browser entry point
   app/                         App shell, providers, and global styles
   features/pokemon/            Explorer screen and its styles
-    components/                Catalog card, type badge, and stats panel
-    data/                      Static preview data
+    api/                       Catalog, search index, details, and evolution requests
+    components/                Catalog cards and stats, comparison, and evolution panels
+    hooks/                     React Query hooks and explorer URL state
     types.ts                   Shapes used by the UI
   shared/api/                  Configured Axios instance
 ```
-
-`AppProviders.tsx` creates one React Query client for the app. By default, query data stays fresh for five minutes and unused entries can be kept in memory for up to 30 minutes. `pokeapi-client.ts` contains the PokéAPI base URL and a 10-second request timeout.
-
-## Start here
-
-1. Open the [PokéAPI list response](https://pokeapi.co/api/v2/pokemon/?limit=24&offset=0). Inspect `results`, `next`, and `previous` in the browser.
-2. Add your request functions and query hooks under `src/features/pokemon/api/`. Use the shared Axios instance for requests and React Query for cache and loading state. Keep API response types near your requests and map them to the shapes the UI needs.
-3. Render the first page in `PokemonExplorer.tsx`. The list returns `name` and `url`. Start with names, and add loading, empty, and error states. Add a Pokémon's type when that data is available.
-4. Open the [Pikachu detail response](https://pokeapi.co/api/v2/pokemon/pikachu/). Use the selected Pokémon's details to populate `StatsPanel`.
-5. Add pagination. Once the flow works, save a baseline commit before profiling or optimizing it.
